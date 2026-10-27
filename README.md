@@ -1,28 +1,68 @@
 # Where Did I Park?
 
-Where Did I Park? is a browser-based parking portal demo. It includes rider sign-in and registration screens, an interactive parking-lot map and booking flow, an active parking pass, vehicle management, parking history, and a payment screen.
+A static, browser-based parking portal demo. Riders can browse a simulated parking lot, book a space, view an active pass, manage vehicles, review parking history, and try a simulated checkout flow.
 
 ## Run locally
 
-The project is plain HTML, CSS, and JavaScript; it has no build step or package dependencies. From the project folder, start a local web server:
+The project uses plain HTML, CSS, and JavaScript. It has no build step, package manager, or backend service.
 
-```powershell
-py -m http.server 8000
-```
+1. Install Python 3 if it is not already available.
+2. Open a terminal in the project root (the folder containing `index.html`).
+3. Start the local web server:
 
-Then open [http://localhost:8000](http://localhost:8000) in your browser. If the `py` command is unavailable, install Python or use another static-file server.
+   ```powershell
+   py -m http.server 8000
+   ```
+
+   If `py` is not available, try `python -m http.server 8000`.
+4. Open [http://localhost:8000](http://localhost:8000) in a browser.
+5. Stop the server with `Ctrl+C` when finished.
+
+Using a local server is recommended over opening the HTML files directly. The app relies on browser storage, and browser behavior for `file://` pages can vary.
 
 ## Pages
 
-- `index.html` — rider welcome, sign-in, and registration
-- `map.html` — parking-lot map and booking
-- `pass.html` — active parking session and pass
-- `vehicles.html` — vehicle garage
-- `history.html` — past sessions and receipts
-- `payment.html` — parking payment flow
+| Page | Purpose |
+| --- | --- |
+| `index.html` | Rider welcome, sign-in, and registration |
+| `map.html` | Parking lot map, space selection, and booking |
+| `pass.html` | Active parking pass and session details |
+| `vehicles.html` | Add and manage vehicles |
+| `history.html` | View completed parking sessions |
+| `payment.html` | Demonstration checkout flow |
 
-## Notes
+## Project structure
 
-- This is a front-end demo. Account data, vehicles, bookings, and preferences are stored in the browser's `localStorage`; they are not sent to a server. Clearing site data or using a different browser removes or separates that data.
-- The payment flow is a demonstration and does not process real payments.
-- Google Fonts and Font Awesome are loaded from external CDNs, so those assets require an internet connection.
+```text
+Where-Did-I-Park/
+├── assets/
+│   ├── css/
+│   │   └── style.css       # Shared and page-specific styles
+│   └── js/
+│       └── app.js          # Client-side page behavior
+├── history.html
+├── index.html
+├── map.html
+├── pass.html
+├── payment.html
+├── vehicles.html
+├── .gitignore
+└── README.md
+```
+
+The HTML pages stay in the project root so their page-to-page links remain short. All pages load the shared stylesheet and JavaScript from `assets/`.
+
+## Features
+
+- Responsive parking map with simulated spaces, availability states, and booking controls
+- Rider sign-in and registration screens with a local demo profile
+- Active parking pass, vehicle garage, and session history views
+- Theme and language preferences
+- Browser-local persistence for demo rider, vehicle, booking, and preference data
+
+## Limitations
+
+- This is a front-end demonstration, not a production parking service. It has no backend, real account authentication, live lot availability, or server-side data storage.
+- Checkout is simulated. Do not enter real payment details.
+- Browser data is stored in `localStorage` for the current site origin. It is not synced between browsers or devices and can be removed by clearing site data.
+- Google Fonts and Font Awesome load from external CDNs and require an internet connection.

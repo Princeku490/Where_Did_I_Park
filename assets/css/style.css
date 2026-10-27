@@ -40,6 +40,7 @@
 /* Dark Theme (Default) */
 body.dark-mode {
   --bg-page: #0b0f19;
+  --bg-base: var(--bg-page);
   --bg-card: #131b2e;
   --bg-subtle: #1c263c;
   --bg-input: #172136;
@@ -50,6 +51,7 @@ body.dark-mode {
   --text-words: rgb(252, 3, 23);
   --text-primary: rgb(252, 3, 23);
   --text-secondary: #94a3b8;
+  --text-muted: var(--text-secondary);
   --text-light: #ffffff;
   --text-dim: #64748b;
 
@@ -59,6 +61,7 @@ body.dark-mode {
 /* Light Theme */
 body.light-mode {
   --bg-page: #f8fafc;
+  --bg-base: var(--bg-page);
   --bg-card: #ffffff;
   --bg-subtle: #f1f5f9;
   --bg-input: #ffffff;
@@ -69,6 +72,7 @@ body.light-mode {
   --text-words: rgb(252, 3, 23);
   --text-primary: rgb(252, 3, 23);
   --text-secondary: #475569;
+  --text-muted: var(--text-secondary);
   --text-light: #0f172a;
   --text-dim: #94a3b8;
 
@@ -334,7 +338,8 @@ body {
   padding: 24px 20px 60px;
 }
 
-.page-header-banner {
+.page-header-banner,
+.page-top-banner {
   background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-subtle) 100%);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -346,6 +351,18 @@ body {
   gap: 16px;
   flex-wrap: wrap;
   box-shadow: var(--shadow-card);
+}
+
+.p-banner-text {
+  flex: 1 1 30rem;
+  min-width: 0;
+}
+
+.p-banner-action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .page-step-pill {
@@ -1237,6 +1254,11 @@ body {
   right: -35px;
 }
 
+.beam-right {
+  left: -35px;
+  transform: translateY(-50%) rotate(180deg);
+}
+
 .car-badge-plate {
   background: #000000;
   color: #facc15;
@@ -1270,12 +1292,29 @@ body {
   color: var(--brand-red);
 }
 
+.road-mark,
+.road-speed {
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.road-lane-line {
+  flex: 1;
+  border-top: 1px solid currentColor;
+  margin: 0 16px;
+  opacity: 0.45;
+}
+
 .central-driveway {
   background: rgba(0, 0, 0, 0.25);
   border-top: 2px dashed var(--road-line);
   border-bottom: 2px dashed var(--road-line);
   padding: 10px 0;
   text-align: center;
+}
+
+.sub-driveway {
+  background: rgba(0, 0, 0, 0.16);
 }
 
 .driveway-text {
@@ -1303,6 +1342,27 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
   gap: 10px;
+}
+
+.dir-search-wrap {
+  flex: 0 1 260px;
+  min-width: 180px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-words);
+  font: inherit;
+}
+
+.dir-search-wrap .form-control {
+  padding: 7px 12px;
+  background: var(--bg-subtle);
+  font-size: 0.85rem;
 }
 
 .parking-slot {
@@ -1487,6 +1547,35 @@ body {
   gap: 12px;
 }
 
+.fastag-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.fastag-header p {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.fleet-vehicle-card {
+  background: var(--bg-subtle);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all var(--transition-smooth);
+}
+
+.fleet-vehicle-card.fleet-active {
+  border-color: var(--brand-red);
+  background: var(--brand-red-subtle);
+  box-shadow: 0 0 14px var(--brand-red-glow);
+}
+
 .fleet-card {
   background: var(--bg-subtle);
   border: 2px solid var(--border-color);
@@ -1528,10 +1617,31 @@ body {
   color: #ffffff;
 }
 
+.fleet-vehicle-card.fleet-active .fleet-icon {
+  background-color: var(--brand-red);
+  color: #ffffff;
+}
+
+.fleet-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .fleet-info strong {
   display: block;
   font-size: 1rem;
   color: var(--text-words);
+}
+
+.fleet-info span {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.fleet-info em {
+  color: var(--brand-red);
+  font-style: normal;
+  font-weight: 700;
 }
 
 .fleet-info small {
@@ -1552,6 +1662,18 @@ body {
   font-weight: 800;
   padding: 4px 10px;
   border-radius: var(--radius-full);
+}
+
+.active-badge {
+  background: var(--brand-red);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 /* --------------------------------------------------
@@ -1996,6 +2118,14 @@ body {
   color: var(--text-secondary);
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.footer-left {
+  flex: 1 1 24rem;
+}
+
+.footer-right {
+  text-align: right;
 }
 
 .footer strong {
@@ -3394,6 +3524,12 @@ body {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
 .welcome-user-title {
   font-family: var(--font-heading);
   font-size: 2.1rem;
@@ -3659,6 +3795,44 @@ body {
   box-shadow: var(--shadow-card);
 }
 
+.payment-methods-card {
+  position: relative;
+}
+
+.payment-processing-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: var(--bg-card);
+  border-radius: inherit;
+  text-align: center;
+}
+
+.payment-action-bottom {
+  margin-top: 20px;
+}
+
+.success-actions-row {
+  display: grid;
+  gap: 10px;
+}
+
+.card-inputs-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.card-simulator-wrap {
+  display: grid;
+  gap: 20px;
+}
+
 .card-header-styled {
   display: flex;
   align-items: center;
@@ -3722,6 +3896,63 @@ body {
   margin-bottom: 22px;
 }
 
+.modal-action-row {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ticket-body {
+  padding-bottom: 4px;
+}
+
+.user-profile-capsule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+}
+
+.user-capsule-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.user-capsule-name,
+.user-capsule-plate {
+  display: block;
+}
+
+.user-capsule-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.user-capsule-plate {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+}
+
+.user-avatar-letter {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--brand-red);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.capsule-logout-btn {
+  flex: 0 0 auto;
+}
+
 .summary-field {
   display: flex;
   justify-content: space-between;
@@ -3766,6 +3997,11 @@ body {
 
 .price-row strong {
   color: var(--text-light);
+}
+
+.text-free {
+  color: #10b981;
+  font-size: 0.75rem;
 }
 
 .price-row.total-row {
@@ -4124,6 +4360,3 @@ body {
     grid-template-columns: 1fr;
   }
 }
-
-
-

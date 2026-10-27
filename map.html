@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="dark-mode" data-page="map">
 
@@ -305,7 +305,7 @@
             <p class="card-subtitle">Comprehensive listing of all parking bays across all floors</p>
           </div>
           <div class="dir-search-wrap">
-            <input type="text" id="slotDirSearchInput" placeholder="Filter by slot ID, e.g. A-02" class="form-control" style="background:var(--bg-subtle); border:1px solid var(--border-color); color:var(--text-words); padding:7px 12px; border-radius:6px; font-size:0.85rem;">
+            <input type="text" id="slotDirSearchInput" placeholder="Filter by slot ID, e.g. A-02" class="form-control">
           </div>
         </div>
         <div class="slot-dir-table-wrap">
@@ -356,7 +356,7 @@
 
             <div class="form-field" style="margin-top:16px;">
               <label><i class="fa-solid fa-car"></i> Vehicle Type</label>
-              <select id="calcVehicleTypeSelect" class="form-control" style="width:100%; background:var(--bg-base); border:1px solid var(--border-color); color:var(--text-words); padding:9px 12px; border-radius:6px;">
+              <select id="calcVehicleTypeSelect" class="form-control">
                 <option value="Car">Sedan / Hatchback (₹20/hr)</option>
                 <option value="SUV">SUV / Large Vehicle (₹25/hr)</option>
                 <option value="Motorcycle">Two-Wheeler / Bike (₹10/hr)</option>
@@ -367,7 +367,6 @@
             <div class="form-field" style="margin-top:16px;">
               <label class="ev-toggle-label">
                 <input type="checkbox" id="calcEvChargingCheck">
-                <span class="ev-toggle-custom"></span>
                 <span><i class="fa-solid fa-bolt-lightning" style="color:#06b6d4;"></i> Add EV Supercharging (+₹30 flat)</span>
               </label>
             </div>
@@ -504,7 +503,6 @@
         <div class="form-field">
           <label class="ev-toggle-label">
             <input type="checkbox" id="enableEvChargingCheckbox">
-            <span class="ev-toggle-custom"></span>
             <span><i class="fa-solid fa-bolt-lightning" style="color: #06b6d4;"></i> <span data-i18n="lbl_ev_charge">Activate EV Supercharger Station (+₹30 flat charging fee)</span></span>
           </label>
         </div>
@@ -844,6 +842,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script src="app.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
