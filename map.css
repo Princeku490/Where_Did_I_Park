@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Where Did I Park — MAP PAGE STYLESHEET
+   Used by: map.html (data-page="map")
+   Contains: Parking lot schematic, animated car, slot grid,
+             floor tabs, lot legend, booking form, payment modal
+   ========================================================================== */
+
+/* --------------------------------------------------
+   Floor Level Tabs
+   -------------------------------------------------- */
+.lot-level-tabs {
+  display: flex;
+  gap: 8px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.level-tab-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-family);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.level-tab-btn.active {
+  background-color: var(--brand-red);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------
+   Lot Legend
+   -------------------------------------------------- */
+.lot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-words);
+}
+
+.legend-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.available-box  { background: var(--slot-available); }
+.selected-box   { background: var(--brand-red); box-shadow: 0 0 8px var(--brand-red); }
+.user-parked-box{ background: var(--brand-red); border: 2px solid #fff; }
+.occupied-box   { background: var(--slot-occupied); }
+.ev-box         { background: var(--slot-ev); }
+
+/* --------------------------------------------------
+   Parking Schematic (Asphalt Map)
+   -------------------------------------------------- */
+.parking-schematic {
+  position: relative;
+  background-color: var(--lot-asphalt);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------
+   Feature 1.1: Animated Driving Car
+   -------------------------------------------------- */
+.simulated-driving-car {
+  position: absolute;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: left 0.85s cubic-bezier(0.2, 0.9, 0.3, 1),
+              top  0.85s cubic-bezier(0.2, 0.9, 0.3, 1),
+              transform 0.5s ease;
+  transform-origin: center center;
+}
+
+.car-sprite {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  background: var(--brand-red);
+  color: #ffffff;
+  border-radius: 6px;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px var(--brand-red);
+}
+
+.car-headlight-beam {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 14px;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(254, 240, 138, 0.75), transparent);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.beam-left {
+  right: -35px;
+}
+
+.car-badge-plate {
+  background: #000000;
+  color: #facc15;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------
+   Road / Driveway Elements
+   -------------------------------------------------- */
+.lot-road {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.entry-road {
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.4);
+  color: #10b981;
+}
+
+.exit-road {
+  border-top: 2px dashed rgba(255, 255, 255, 0.4);
+  color: var(--brand-red);
+}
+
+.central-driveway {
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 2px dashed var(--road-line);
+  border-bottom: 2px dashed var(--road-line);
+  padding: 10px 0;
+  text-align: center;
+}
+
+.driveway-text {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------
+   Slot Rows & Grid
+   -------------------------------------------------- */
+.lot-row-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row-label-tag {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--text-words);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 10px;
+}
+
+/* --------------------------------------------------
+   Individual Parking Slot
+   -------------------------------------------------- */
+.parking-slot {
+  position: relative;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  user-select: none;
+}
+
+.parking-slot .slot-title {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.parking-slot .slot-icon {
+  font-size: 1.15rem;
+}
+
+.parking-slot .slot-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* Slot Status States */
+.parking-slot.available {
+  border-color: var(--slot-available);
+  background-color: var(--slot-available-bg);
+  color: var(--slot-available);
+}
+
+.parking-slot.available:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+.parking-slot.ev-charging-active {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5) !important;
+}
+
+.parking-slot.selected {
+  border-color: var(--brand-red) !important;
+  background-color: var(--brand-red) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px var(--brand-red-glow) !important;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.parking-slot.selected .slot-tag {
+  background: #ffffff;
+  color: var(--brand-red);
+}
+
+.parking-slot.occupied {
+  border-color: var(--border-color);
+  background-color: var(--slot-occupied-bg);
+  color: var(--slot-occupied);
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.parking-slot.user-parked {
+  border-color: var(--brand-red);
+  background: var(--brand-red-subtle);
+  color: var(--brand-red);
+  animation: parked-pulse 2s infinite ease-in-out;
+}
+
+@keyframes parked-pulse {
+  0%, 100% { box-shadow: 0 0 6px var(--brand-red-glow); }
+  50%       { box-shadow: 0 0 16px var(--brand-red); }
+}
+
+/* --------------------------------------------------
+   Booking Form (Feature 2.4)
+   -------------------------------------------------- */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.slot-chosen-display {
+  display: flex;
+  gap: 8px;
+}
+
+.slot-badge-preview {
+  background-color: var(--brand-red);
+  color: #fff;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 65px;
+}
+
+.booking-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.fare-estimate {
+  display: flex;
+  flex-direction: column;
+}
+
+.fare-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.fare-amount {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--brand-red);
+}
+
+/* EV Checkbox Toggle (on map page booking form) */
+.ev-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-words);
+  transition: all var(--transition-smooth);
+}
+
+.ev-toggle-label:hover {
+  border-color: #06b6d4;
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.ev-toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #06b6d4;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------
+   Payment Gateway Modal (Feature 2.4)
+   -------------------------------------------------- */
+.payment-order-summary {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  color: var(--text-words);
+}
+
+.summary-line.total-line {
+  border-top: 1px dashed var(--border-color);
+  padding-top: 8px;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.pay-amount {
+  color: var(--brand-red);
+  font-size: 1.25rem;
+}
+
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.pay-method-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.pay-method-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.pay-method-inner {
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-smooth);
+}
+
+.pay-icon {
+  font-size: 1.6rem;
+  color: var(--text-words);
+}
+
+.pay-method-inner span {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-words);
+}
+
+.pay-method-card input[type="radio"]:checked + .pay-method-inner {
+  border-color: var(--brand-red);
+  background: var(--brand-red-subtle);
+  box-shadow: 0 0 12px var(--brand-red-glow);
+}
+
+.pay-processing-state {
+  text-align: center;
+  padding: 24px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.processing-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--brand-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.modal-action-row {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------
+   Responsive: Map Page
+   -------------------------------------------------- */
+@media (max-width: 900px) {
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+}

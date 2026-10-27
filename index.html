@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome | Where Did I Park - Rider Login & Registration</title>
+  <meta name="description" content="Welcome to Where Did I Park. Sign in to access your interactive parking map, active parking pass, garage, and history.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode" data-page="auth">
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo" id="navBrandLogo">
+        <div class="logo-badge">
+          <i class="fa-solid fa-square-parking"></i>
+        </div>
+        <div class="logo-meta">
+          <span class="brand-name">Where Did I Park</span>
+          <span class="brand-tagline" data-i18n="brand_tagline">Smart Parking & Slot Booking</span>
+        </div>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Language Selector Dropdown (Hindi, English, Punjabi, Tamil) -->
+        <div class="lang-selector-dropdown" id="langSelectorWrap">
+          <button type="button" class="lang-btn" id="langToggleBtn" title="Change Language / भाषा बदलें">
+            <i class="fa-solid fa-language"></i>
+            <span id="currentLangLabel">English</span>
+            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu hidden" id="langDropdownMenu">
+            <button type="button" class="lang-opt-btn active" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-native">EN</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="hi">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Hindi</span>
+              <span class="lang-native">हिंदी</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="pa">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Punjabi</span>
+              <span class="lang-native">ਪੰਜਾਬੀ</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="ta">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Tamil</span>
+              <span class="lang-native">தமிழ்</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Voice Assistant Toggle -->
+        <button id="voiceToggleBtn" class="icon-toggle-btn active" title="Toggle Voice Assistant">
+          <i class="fa-solid fa-volume-high" id="voiceIcon"></i>
+          <span class="btn-subtext" data-i18n="voice_on">Voice ON</span>
+        </button>
+
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" class="theme-switch-btn" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+          <span class="theme-text" id="themeText" data-i18n="theme_light">Light Mode</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- RIDER AUTHENTICATION PORTAL (LOGIN & REGISTER) -->
+    <section class="auth-section">
+      <div class="auth-card" id="authCard">
+        
+        <div class="auth-header">
+          <div class="auth-badge">
+            <i class="fa-solid fa-sparkles"></i> <span data-i18n="welcome">Welcome</span>
+          </div>
+          <h1 class="auth-title" data-i18n="welcome">Welcome</h1>
+          <p class="auth-subtitle" data-i18n="welcome_sub">
+            Sign in to access your interactive parking map, active spot pass, garage, and history.
+          </p>
+        </div>
+
+        <!-- Demo Credentials Helper Box -->
+        <div class="demo-helper-box">
+          <div>
+            <i class="fa-solid fa-circle-info" style="color:var(--brand-red);"></i>
+            <span>Demo Rider:</span>
+            <span class="demo-helper-code">alex@rider.com</span> / <span class="demo-helper-code">demo123</span>
+          </div>
+          <button type="button" class="demo-helper-btn" id="autoFillDemoBtn" title="Click to pre-fill login fields">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill
+          </button>
+        </div>
+
+        <!-- Auth Tabs: Sign In / Register -->
+        <div class="auth-tabs">
+          <button type="button" class="tab-btn active" id="tabLoginBtn">
+            <i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="sign_in">Sign In</span>
+          </button>
+          <button type="button" class="tab-btn" id="tabRegisterBtn">
+            <i class="fa-solid fa-user-plus"></i> <span data-i18n="new_reg">New Rider Registration</span>
+          </button>
+        </div>
+
+        <!-- SIGN IN FORM -->
+        <form id="loginForm" class="auth-form">
+          <div class="form-field">
+            <label for="loginIdentifier" data-i18n="email_phone">Email or Phone Number</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-envelope input-icon"></i>
+              <input type="text" id="loginIdentifier" placeholder="e.g. alex@rider.com or 9876543210" required autocomplete="username">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="loginPassword" data-i18n="password">Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="pwd-toggle-btn" id="toggleLoginPwd" title="Show / Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span data-i18n="sign_in_btn">Sign In to Parking Portal</span>
+          </button>
+
+          <!-- Quick Demo Access -->
+          <div class="demo-login-box">
+            <span>Want instant access without typing?</span>
+            <button type="button" id="quickDemoLoginBtn" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-bolt"></i> <span data-i18n="one_click_demo">One-Click Demo Rider Login</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="registerForm" class="auth-form hidden">
+          <div class="form-field">
+            <label for="regFullName" data-i18n="full_name">Full Name</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-user input-icon"></i>
+              <input type="text" id="regFullName" placeholder="e.g. Prince Kumar" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="regEmail">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                <input type="email" id="regEmail" placeholder="name@email.com" required>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="regPhone" data-i18n="mobile_no">Mobile Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input type="tel" id="regPhone" placeholder="10-digit number" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="regVehicleType" data-i18n="primary_vehicle">Primary Vehicle</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-car-side input-icon"></i>
+                <select id="regVehicleType">
+                  <option value="Car">Car / Sedan</option>
+                  <option value="EV">Electric Vehicle (EV)</option>
+                  <option value="SUV">SUV / 4x4</option>
+                  <option value="Motorcycle">Motorcycle / Bike</option>
+                  <option value="Scooter">Scooter / EV Moped</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="regPlateNumber" data-i18n="model_plate">Vehicle Model & Plate Number</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-id-card input-icon"></i>
+                <input type="text" id="regPlateNumber" placeholder="e.g. Tata Nexon EV - DL 01 AB 1234" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="regPassword" data-i18n="create_pwd">Create Password</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+              <button type="button" class="pwd-toggle-btn" id="toggleRegPwd" title="Show / Hide Password">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-user-check"></i>
+            <span data-i18n="reg_btn">Register & Enter Parking Lot</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- WELCOME USER & PARKING GUIDELINES PORTAL (Shown after sign-in / registration) -->
+      <div class="guidelines-card hidden" id="guidelinesCard">
+        <!-- Welcome Hero Greeting -->
+        <div class="guidelines-hero">
+          <div class="welcome-user-badge">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="welcomeStatusTag">Rider Authenticated</span>
+          </div>
+          <h1 class="welcome-user-title">
+            Welcome, <span id="welcomeUserName" class="highlight-user">Rider</span>! 👋
+          </h1>
+          <p class="welcome-user-subtitle">
+            Your rider profile is ready. Please review the official parking guidelines and safety instructions below before entering the parking bays.
+          </p>
+
+          <!-- Rider Quick Meta Capsule -->
+          <div class="welcome-rider-capsule">
+            <div class="rider-capsule-item">
+              <i class="fa-solid fa-id-card"></i>
+              <span id="welcomeUserPlate">DL 01 AB 7788</span>
+            </div>
+            <div class="rider-capsule-item">
+              <i class="fa-solid fa-envelope"></i>
+              <span id="welcomeUserEmail">alex@rider.com</span>
+            </div>
+            <div class="rider-capsule-item">
+              <i class="fa-solid fa-car-side"></i>
+              <span id="welcomeUserVehicle">EV / Sedan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Parking Guidelines Section -->
+        <div class="guidelines-content">
+          <div class="guidelines-section-header">
+            <div class="guidelines-title-wrap">
+              <i class="fa-solid fa-clipboard-list guidelines-main-icon"></i>
+              <div>
+                <h2 class="guidelines-heading">Parking Lot Guidelines & Safety Rules</h2>
+                <span class="guidelines-sub">Official parking regulations for all floor levels (Ground, B1, B2)</span>
+              </div>
+            </div>
+            <span class="guidelines-badge"><i class="fa-solid fa-shield-halved"></i> Mandatory Compliance</span>
+          </div>
+
+          <div class="guidelines-grid">
+            <!-- Guideline 1: Speed Limit -->
+            <div class="guideline-item">
+              <div class="guideline-icon speed">
+                <i class="fa-solid fa-gauge-high"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 01</span> 10 KM/H Speed Limit (धीमी गति)
+                </div>
+                <p class="guideline-desc">
+                  Strict maximum speed limit of 10 km/h inside all ramps and drive lanes. Pedestrians always have right of way.
+                </p>
+              </div>
+            </div>
+
+            <!-- Guideline 2: Designated Slot -->
+            <div class="guideline-item">
+              <div class="guideline-icon slot">
+                <i class="fa-solid fa-square-parking"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 02</span> Park Strictly in Designated Bay
+                </div>
+                <p class="guideline-desc">
+                  Park only within the white/yellow demarcated lines of your booked green slot. No blocking pathways or double parking.
+                </p>
+              </div>
+            </div>
+
+            <!-- Guideline 3: EV Charging Stations -->
+            <div class="guideline-item">
+              <div class="guideline-icon ev">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 03</span> EV Charging Bays Priority (ईवी नियम)
+                </div>
+                <p class="guideline-desc">
+                  Cyan slots are equipped with 50kW DC Superchargers. Non-EV vehicles parked in charging bays will be towed.
+                </p>
+              </div>
+            </div>
+
+            <!-- Guideline 4: Digital Pass Validation -->
+            <div class="guideline-item">
+              <div class="guideline-icon pass">
+                <i class="fa-solid fa-qrcode"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 04</span> Digital Pass & QR Validation
+                </div>
+                <p class="guideline-desc">
+                  Always keep your digital pass QR barcode ready for automatic boom barrier opening at entry and exit gates.
+                </p>
+              </div>
+            </div>
+
+            <!-- Guideline 5: Overtime & Extensions -->
+            <div class="guideline-item">
+              <div class="guideline-icon time">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 05</span> Track Time & Extend Before Expiry
+                </div>
+                <p class="guideline-desc">
+                  Monitor your live parking timer on the Active Pass tab. Extend your reservation in advance to avoid penalty rates.
+                </p>
+              </div>
+            </div>
+
+            <!-- Guideline 6: 24/7 Security & CCTV -->
+            <div class="guideline-item">
+              <div class="guideline-icon safety">
+                <i class="fa-solid fa-video"></i>
+              </div>
+              <div class="guideline-text">
+                <div class="guideline-title">
+                  <span class="rule-num">Rule 06</span> 24/7 CCTV & Security Assistance
+                </div>
+                <p class="guideline-desc">
+                  Premises are under continuous CCTV surveillance. For assistance, contact Floor Attendant or dial 1800-PARK-HELP.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Container: Button to proceed to Map -->
+          <div class="guidelines-action-container">
+            <div class="guidelines-agreement-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>Click the button below to proceed directly to the interactive parking map & bay booking.</span>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-block btn-lg proceed-map-btn" id="proceedToMapBtn">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span>Enter Interactive Parking Map</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div class="guidelines-aux-actions">
+              <button type="button" class="guidelines-link-btn" id="guidelinesSwitchUserBtn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Switch Account / Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Toast Alerts -->
+  <div id="toastNotification" class="toast-popup hidden">
+    <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+    <span id="toastMessage">Welcome to Where Did I Park.</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Where Did I Park</strong> &bull; Custom Interactive Parking Map & Spot Reservation System.
+      </div>
+      <div class="footer-right">
+        <span>Handcrafted with HTML, CSS & JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Garage & Vehicles | Where Did I Park</title>
+  <meta name="description" content="Manage all your registered vehicles. Add cars, motorcycles, scooters, or EVs, and switch your active ride anytime.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode" data-page="vehicles">
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="window.location.href='index.html'">
+        <div class="logo-badge">
+          <i class="fa-solid fa-square-parking"></i>
+        </div>
+        <div class="logo-meta">
+          <span class="brand-name">Where Did I Park</span>
+          <span class="brand-tagline">Smart Parking & Slot Booking</span>
+        </div>
+      </div>
+
+      <!-- Navigation Pages (5 Modules) -->
+      <nav class="portal-nav-links">
+        <a href="map.html" class="portal-nav-item">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>1. Map & Book</span>
+        </a>
+        <a href="pass.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" id="navPassLink" title="Opens in new tab">
+          <i class="fa-solid fa-ticket"></i>
+          <span>2. Active Pass</span>
+          <span class="nav-live-dot hidden" id="navPassDot"></span>
+        </a>
+        <a href="vehicles.html" class="portal-nav-item active">
+          <i class="fa-solid fa-warehouse"></i>
+          <span>3. My Garage</span>
+        </a>
+        <a href="history.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>4. History</span>
+        </a>
+        <a href="payment.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-credit-card"></i>
+          <span>5. Payment</span>
+        </a>
+      </nav>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Language Selector Dropdown -->
+        <div class="lang-selector-dropdown" id="langSelectorWrap">
+          <button type="button" class="lang-btn" id="langToggleBtn" title="Change Language">
+            <i class="fa-solid fa-language"></i>
+            <span id="currentLangLabel">English</span>
+            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu hidden" id="langDropdownMenu">
+            <button type="button" class="lang-opt-btn active" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-native">EN</span></button>
+            <button type="button" class="lang-opt-btn" data-lang="hi"><span class="lang-flag">🇮🇳</span><span class="lang-name">Hindi</span><span class="lang-native">हिंदी</span></button>
+            <button type="button" class="lang-opt-btn" data-lang="pa"><span class="lang-flag">🇮🇳</span><span class="lang-name">Punjabi</span><span class="lang-native">ਪੰਜਾਬੀ</span></button>
+            <button type="button" class="lang-opt-btn" data-lang="ta"><span class="lang-flag">🇮🇳</span><span class="lang-name">Tamil</span><span class="lang-native">தமிழ்</span></button>
+          </div>
+        </div>
+        <!-- Voice Assistant Toggle -->
+        <button id="voiceToggleBtn" class="icon-toggle-btn active" title="Toggle Voice Assistant">
+          <i class="fa-solid fa-volume-high" id="voiceIcon"></i>
+          <span class="btn-subtext" data-i18n="voice_on">Voice ON</span>
+        </button>
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" class="theme-switch-btn" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+          <span class="theme-text" id="themeText" data-i18n="theme_light">Light Mode</span>
+        </button>
+        <!-- Logged-in User Capsule -->
+        <div id="userProfileCapsule" class="user-capsule">
+          <div class="user-avatar" id="userAvatarLetter">R</div>
+          <div class="user-info-text">
+            <span class="user-name-display" id="navUserName">Rider</span>
+            <span class="user-plate-display" id="navUserPlate">Plate No.</span>
+          </div>
+          <button id="logoutBtn" class="logout-link-btn" title="Sign out of account">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span data-i18n="sign_out">Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- PAGE 3: MY VEHICLE GARAGE SECTION -->
+    <div class="page-header-banner">
+      <div class="p-banner-text">
+        <span class="page-step-pill">Page 3 of 4 &bull; Rider Garage</span>
+        <h1 class="page-main-title">My Vehicle Garage</h1>
+        <p class="page-main-sub">Manage your personal rides. Add your cars, bikes, scooters, or EVs, and pick your active ride for fast parking.</p>
+      </div>
+      <div class="p-banner-action">
+        <a href="map.html" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-map-pin"></i> Book Slot with Active Ride
+        </a>
+      </div>
+    </div>
+
+    <!-- GARAGE CONTENT LAYOUT: SPLIT GRID -->
+    <div class="garage-layout-grid">
+      
+      <!-- ADD NEW VEHICLE FORM CARD -->
+      <div class="card add-vehicle-card">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="fa-solid fa-plus-circle"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Add Vehicle to Garage</h3>
+            <p class="card-subtitle">Register another car, bike or EV to your profile</p>
+          </div>
+        </div>
+
+        <form id="garageAddVehicleForm" class="auth-form">
+          <div class="form-field">
+            <label for="garageVehicleType"><i class="fa-solid fa-shapes"></i> Vehicle Type</label>
+            <select id="garageVehicleType">
+              <option value="Car">Car / Sedan</option>
+              <option value="EV">Electric Vehicle (EV)</option>
+              <option value="Motorcycle">Motorcycle / Bike</option>
+              <option value="Scooter">Scooter / Moped</option>
+              <option value="SUV">SUV / 4x4</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="garageVehiclePlate"><i class="fa-solid fa-id-card"></i> Vehicle Model & Plate Number *</label>
+            <input type="text" id="garageVehiclePlate" placeholder="e.g. Royal Enfield - DL 04 AB 5678" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Save to My Garage</span>
+          </button>
+        </form>
+
+        <div class="garage-tip-box">
+          <i class="fa-solid fa-lightbulb"></i>
+          <div>
+            <strong>Quick Tip:</strong>
+            <p>Vehicles marked as "EV" automatically activate the Supercharger fast-lane options on the parking map.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVED VEHICLES LIST -->
+      <div class="card fleet-list-card">
+        <div class="card-header space-between">
+          <div class="card-header-left">
+            <div class="card-icon-wrap icon-gray">
+              <i class="fa-solid fa-warehouse"></i>
+            </div>
+            <div>
+              <h3 class="card-title">Registered Fleet</h3>
+              <p class="card-subtitle" id="garageCountText">2 vehicles in your garage</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fleet-cards-container" id="garageFleetList">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Clean Toast Alerts -->
+  <div id="toastNotification" class="toast-popup hidden">
+    <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+    <span id="toastMessage">Garage updated.</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Where Did I Park</strong> &bull; Custom Interactive Parking Map & Spot Reservation System.
+      </div>
+      <div class="footer-right">
+        <span>Page 3: My Garage &bull; Handcrafted with HTML, CSS & JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

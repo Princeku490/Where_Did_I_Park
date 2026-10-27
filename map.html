@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Map & Booking | Where Did I Park</title>
+  <meta name="description" content="Interactive parking lot map and slot booking system. Pick any slot, watch animated car driving, and pay via secure payment gateway.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode" data-page="map">
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="window.location.href='index.html'">
+        <div class="logo-badge">
+          <i class="fa-solid fa-square-parking"></i>
+        </div>
+        <div class="logo-meta">
+          <span class="brand-name">Where Did I Park</span>
+          <span class="brand-tagline">Smart Parking & Slot Booking</span>
+        </div>
+      </div>
+
+      <!-- Navigation Pages (5 Modules) -->
+      <nav class="portal-nav-links">
+        <a href="map.html" class="portal-nav-item active">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span data-i18n="nav_map">1. Map & Book</span>
+        </a>
+        <a href="pass.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" id="navPassLink" title="Opens in new tab">
+          <i class="fa-solid fa-ticket"></i>
+          <span data-i18n="nav_pass">2. Active Pass</span>
+          <span class="nav-live-dot hidden" id="navPassDot"></span>
+        </a>
+        <a href="vehicles.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-warehouse"></i>
+          <span data-i18n="nav_garage">3. My Garage</span>
+        </a>
+        <a href="history.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span data-i18n="nav_history">4. History</span>
+        </a>
+        <a href="payment.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-credit-card"></i>
+          <span data-i18n="nav_payment">5. Payment</span>
+        </a>
+      </nav>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Language Selector Dropdown (Hindi, English, Punjabi, Tamil) -->
+        <div class="lang-selector-dropdown" id="langSelectorWrap">
+          <button type="button" class="lang-btn" id="langToggleBtn" title="Change Language / भाषा बदलें">
+            <i class="fa-solid fa-language"></i>
+            <span id="currentLangLabel">English</span>
+            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu hidden" id="langDropdownMenu">
+            <button type="button" class="lang-opt-btn active" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-native">EN</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="hi">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Hindi</span>
+              <span class="lang-native">हिंदी</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="pa">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Punjabi</span>
+              <span class="lang-native">ਪੰਜਾਬੀ</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="ta">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Tamil</span>
+              <span class="lang-native">தமிழ்</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Voice Assistant Toggle -->
+        <button id="voiceToggleBtn" class="icon-toggle-btn active" title="Toggle Voice Assistant">
+          <i class="fa-solid fa-volume-high" id="voiceIcon"></i>
+          <span class="btn-subtext" data-i18n="voice_on">Voice ON</span>
+        </button>
+
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" class="theme-switch-btn" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+          <span class="theme-text" id="themeText" data-i18n="theme_light">Light Mode</span>
+        </button>
+
+        <!-- Logged-in User Capsule -->
+        <div id="userProfileCapsule" class="user-capsule">
+          <div class="user-avatar" id="userAvatarLetter">R</div>
+          <div class="user-info-text">
+            <span class="user-name-display" id="navUserName">Rider</span>
+            <span class="user-plate-display" id="navUserPlate">Plate No.</span>
+          </div>
+          <button id="logoutBtn" class="logout-link-btn" title="Sign out of account">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span data-i18n="sign_out">Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- PAGE 1: INTERACTIVE PARKING LOT MAP & BOOKING SECTION -->
+    <div class="page-header-banner">
+      <div class="p-banner-text">
+        <span class="page-step-pill" data-i18n="page_step_1">Page 1 of 4 &bull; Interactive Parking Bay</span>
+        <h1 class="page-main-title" data-i18n="map_title">Interactive Parking Lot Map</h1>
+        <p class="page-main-sub" data-i18n="map_sub">Click any available green bay to select your spot, watch the car park animation, and confirm your booking.</p>
+      </div>
+      <div class="p-banner-action">
+        <a href="pass.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-ticket"></i> <span data-i18n="view_active_pass">View My Active Pass</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- PRIMARY VIEW TABS (Multiple Tab System) -->
+    <div class="view-tabs-container">
+      <div class="view-tabs-bar">
+        <button type="button" class="view-tab-btn active" id="viewTabMapBtn" data-target="paneMapView">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span data-i18n="tab_map_view">🗺️ Lot Layout View</span>
+        </button>
+        <button type="button" class="view-tab-btn" id="viewTabDirBtn" data-target="paneDirView">
+          <i class="fa-solid fa-list-check"></i>
+          <span data-i18n="tab_directory_view">📋 Slot Directory</span>
+          <span class="view-tab-badge" id="slotDirCountBadge">24 Bays</span>
+        </button>
+        <button type="button" class="view-tab-btn" id="viewTabCalcBtn" data-target="paneCalcView">
+          <i class="fa-solid fa-calculator"></i>
+          <span data-i18n="tab_calc_view">🧮 Fare Calculator</span>
+        </button>
+        <button type="button" class="view-tab-btn" id="viewTabRulesBtn" data-target="paneRulesView">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span data-i18n="tab_rules_view">ℹ️ Parking Guidelines</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB PANE 1: INTERACTIVE 2D LOT LAYOUT -->
+    <div id="paneMapView" class="view-tab-pane">
+
+      <!-- Category Filter Pills -->
+      <div class="category-filter-bar" id="slotCategoryFilterBar">
+        <button type="button" class="cat-filter-btn active" data-cat="all">
+          <i class="fa-solid fa-border-all"></i> <span data-i18n="cat_all">All Bays</span>
+        </button>
+        <button type="button" class="cat-filter-btn" data-cat="ev">
+          <i class="fa-solid fa-bolt-lightning" style="color:#06b6d4;"></i> <span data-i18n="cat_ev">⚡ EV Charging</span>
+        </button>
+        <button type="button" class="cat-filter-btn" data-cat="car">
+          <i class="fa-solid fa-car-side" style="color:#3b82f6;"></i> <span data-i18n="cat_car">🚗 Cars & Sedans</span>
+        </button>
+        <button type="button" class="cat-filter-btn" data-cat="bike">
+          <i class="fa-solid fa-motorcycle" style="color:#f59e0b;"></i> <span data-i18n="cat_bike">🛵 Bikes & 2-Wheelers</span>
+        </button>
+      </div>
+
+      <!-- CUSTOM INTERACTIVE PARKING LOT MAP CARD -->
+      <div class="card parking-map-card">
+        <div class="card-header space-between">
+          <div class="card-header-left">
+            <div class="card-icon-wrap">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <div>
+              <h3 class="card-title" data-i18n="map_card_title">Live Parking Lot Layout</h3>
+              <p class="card-subtitle" data-i18n="map_card_sub">Click on any green spot to pick and book your parking slot</p>
+            </div>
+          </div>
+
+          <!-- Floor / Level Tabs -->
+          <div class="lot-level-tabs">
+            <button type="button" class="level-tab-btn active" data-floor="Ground Floor">
+              <span data-i18n="floor_ground">Ground Floor (G)</span>
+            </button>
+            <button type="button" class="level-tab-btn" data-floor="Basement 1">
+              <span data-i18n="floor_b1">Basement 1 (B1)</span>
+            </button>
+            <button type="button" class="level-tab-btn" data-floor="Basement 2">
+              <span data-i18n="floor_b2">Basement 2 (B2)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Parking Lot Map Legend -->
+        <div class="lot-legend">
+          <div class="legend-item">
+            <span class="legend-box available-box"></span>
+            <span data-i18n="legend_avail">Available (Click to select)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box selected-box"></span>
+            <span data-i18n="legend_selected">Selected Spot</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box user-parked-box"></span>
+            <span data-i18n="legend_user">Your Parked Ride</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box occupied-box"></span>
+            <span data-i18n="legend_occupied">Occupied</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-box ev-box"></span>
+            <span data-i18n="legend_ev">EV Charging Spot ⚡</span>
+          </div>
+        </div>
+
+        <!-- VISUAL PARKING LOT SCHEMATIC -->
+        <div class="parking-schematic" id="parkingSchematicArea">
+          
+          <!-- ANIMATED DRIVING VEHICLE LAYER -->
+          <div id="simulatedCar" class="simulated-driving-car hidden">
+            <div class="car-sprite">
+              <i class="fa-solid fa-car-side"></i>
+              <div class="car-headlight-beam beam-left"></div>
+              <div class="car-headlight-beam beam-right"></div>
+            </div>
+            <div class="car-badge-plate" id="simCarPlate">DL 01</div>
+          </div>
+
+          <!-- Entrance Bar -->
+          <div class="lot-road entry-road" id="entryGateMarker">
+            <span class="road-mark"><i class="fa-solid fa-arrow-down"></i> ENTRY GATE 1</span>
+            <span class="road-lane-line"></span>
+            <span class="road-speed">SPEED LIMIT: 10 KM/H</span>
+          </div>
+
+          <!-- Row A: North Parking Bays -->
+          <div class="lot-row-wrapper">
+            <div class="row-label-tag">Row A (Standard Cars)</div>
+            <div class="slots-grid" id="rowASlotsGrid">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Central Driving Lane / Roadway -->
+          <div class="central-driveway" id="centralDrivewayLane">
+            <div class="driveway-text">
+              <i class="fa-solid fa-arrow-right"></i> MAIN DRIVEWAY (KEEP CLEAR) <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <!-- Row B: South Parking Bays -->
+          <div class="lot-row-wrapper">
+            <div class="row-label-tag">Row B (Sedan & SUV Bays)</div>
+            <div class="slots-grid" id="rowBSlotsGrid">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Secondary Driving Lane -->
+          <div class="central-driveway sub-driveway">
+            <div class="driveway-text">
+              <i class="fa-solid fa-arrow-left"></i> TWO-WHEELER & EV AISLE <i class="fa-solid fa-arrow-left"></i>
+            </div>
+          </div>
+
+          <!-- Row C: EV Charging & Bikes -->
+          <div class="lot-row-wrapper">
+            <div class="row-label-tag">Row C (EV Charging & Two-Wheelers)</div>
+            <div class="slots-grid" id="rowCSlotsGrid">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Exit Bar -->
+          <div class="lot-road exit-road">
+            <span class="road-mark"><i class="fa-solid fa-arrow-up"></i> EXIT GATE 2</span>
+            <span class="road-lane-line"></span>
+            <span class="road-speed">PAYMENT CHECKOUT BOOTH</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB PANE 2: SLOT DIRECTORY & TABLE VIEW -->
+    <div id="paneDirView" class="view-tab-pane hidden">
+      <div class="card">
+        <div class="card-header space-between">
+          <div>
+            <h3 class="card-title">All Parking Slots Directory</h3>
+            <p class="card-subtitle">Comprehensive listing of all parking bays across all floors</p>
+          </div>
+          <div class="dir-search-wrap">
+            <input type="text" id="slotDirSearchInput" placeholder="Filter by slot ID, e.g. A-02" class="form-control" style="background:var(--bg-subtle); border:1px solid var(--border-color); color:var(--text-words); padding:7px 12px; border-radius:6px; font-size:0.85rem;">
+          </div>
+        </div>
+        <div class="slot-dir-table-wrap">
+          <table class="slot-dir-table">
+            <thead>
+              <tr>
+                <th>Slot ID</th>
+                <th>Floor</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Rate / Hr</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="slotDirectoryTableBody">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB PANE 3: SMART FARE & TIME CALCULATOR -->
+    <div id="paneCalcView" class="view-tab-pane hidden">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Interactive Parking Fare & Time Calculator</h3>
+            <p class="card-subtitle">Estimate your total parking charges before booking</p>
+          </div>
+        </div>
+        <div class="calc-card-grid">
+          <div class="calc-box">
+            <div class="form-field">
+              <label><i class="fa-solid fa-clock"></i> Select Parking Duration</label>
+              <div class="calc-slider-wrap">
+                <input type="range" id="calcDurationSlider" min="1" max="24" value="3" step="1">
+                <div class="calc-slider-meta">
+                  <span>1 Hour</span>
+                  <strong id="calcSliderValueText" style="color:var(--brand-red); font-size:1.1rem;">3 Hours</strong>
+                  <span>24 Hours</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field" style="margin-top:16px;">
+              <label><i class="fa-solid fa-car"></i> Vehicle Type</label>
+              <select id="calcVehicleTypeSelect" class="form-control" style="width:100%; background:var(--bg-base); border:1px solid var(--border-color); color:var(--text-words); padding:9px 12px; border-radius:6px;">
+                <option value="Car">Sedan / Hatchback (₹20/hr)</option>
+                <option value="SUV">SUV / Large Vehicle (₹25/hr)</option>
+                <option value="Motorcycle">Two-Wheeler / Bike (₹10/hr)</option>
+                <option value="EV">Electric Vehicle (₹20/hr)</option>
+              </select>
+            </div>
+
+            <div class="form-field" style="margin-top:16px;">
+              <label class="ev-toggle-label">
+                <input type="checkbox" id="calcEvChargingCheck">
+                <span class="ev-toggle-custom"></span>
+                <span><i class="fa-solid fa-bolt-lightning" style="color:#06b6d4;"></i> Add EV Supercharging (+₹30 flat)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="calc-result-box">
+            <span style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Calculated Estimate</span>
+            <div class="calc-total-fare" id="calcDisplayTotal">₹60</div>
+            <p id="calcBreakdownText" style="font-size:0.85rem; color:var(--text-muted);">3 Hours @ ₹20/hr &bull; Base Rate</p>
+            <button type="button" class="btn btn-primary btn-sm" id="calcApplyToBookingBtn" style="margin-top:14px;">
+              <i class="fa-solid fa-check"></i> Apply This Duration to Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB PANE 4: PARKING RULES & SAFETY GUIDELINES -->
+    <div id="paneRulesView" class="view-tab-pane hidden">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="card-title">Facility Parking Rules & Safety Guidelines</h3>
+            <p class="card-subtitle">Ensure a safe and hassle-free parking experience for everyone</p>
+          </div>
+        </div>
+        <div class="rules-grid">
+          <div class="rule-item-box">
+            <i class="fa-solid fa-gauge rule-icon"></i>
+            <div>
+              <h4>Speed Limit: 10 KM/H</h4>
+              <p>Strict speed limits apply inside all parking ramps and driveways. Pedestrians have right of way.</p>
+            </div>
+          </div>
+          <div class="rule-item-box">
+            <i class="fa-solid fa-car rule-icon"></i>
+            <div>
+              <h4>Reverse Parking Advised</h4>
+              <p>Please reverse into marked parking bays for safer departure and better line of sight.</p>
+            </div>
+          </div>
+          <div class="rule-item-box">
+            <i class="fa-solid fa-bolt-lightning rule-icon" style="color:#06b6d4;"></i>
+            <div>
+              <h4>EV Charging Etiquette</h4>
+              <p>Only electric vehicles may use green EV bays. Vacate once your vehicle reaches 100% capacity.</p>
+            </div>
+          </div>
+          <div class="rule-item-box">
+            <i class="fa-solid fa-video rule-icon"></i>
+            <div>
+              <h4>24/7 CCTV & Security</h4>
+              <p>Premises are monitored around the clock. Valuables left in vehicles are at owner's risk.</p>
+            </div>
+          </div>
+          <div class="rule-item-box">
+            <i class="fa-solid fa-triangle-exclamation rule-icon" style="color:#eab308;"></i>
+            <div>
+              <h4>Overtime Protection</h4>
+              <p>Extend your parking duration via Active Pass tab before the meter expires to avoid late penalty.</p>
+            </div>
+          </div>
+          <div class="rule-item-box">
+            <i class="fa-solid fa-headset rule-icon"></i>
+            <div>
+              <h4>Emergency Intercom</h4>
+              <p>Use security intercoms placed near elevators on Floor G & B1 or call control room: +91 98765 43210.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKING SYSTEM FORM CARD -->
+    <div class="card booking-action-card" id="bookingCard">
+      <div class="card-header">
+        <div class="card-icon-wrap">
+          <i class="fa-solid fa-bookmark"></i>
+        </div>
+        <div>
+          <h3 class="card-title" data-i18n="book_title">Book Selected Parking Slot</h3>
+          <p class="card-subtitle" data-i18n="book_sub">Choose duration, select vehicle, and proceed to payment</p>
+        </div>
+      </div>
+
+      <form id="slotBookingForm" class="booking-form">
+        
+        <div class="form-row">
+          <!-- Selected Slot Display -->
+          <div class="form-field">
+            <label for="chosenSlotInput"><i class="fa-solid fa-hashtag"></i> <span data-i18n="lbl_slot">Selected Parking Slot *</span></label>
+            <div class="slot-chosen-display">
+              <input type="text" id="chosenSlotInput" placeholder="Click any green spot on the map above" readonly required>
+              <span class="slot-badge-preview" id="chosenSlotBadge">None</span>
+            </div>
+          </div>
+
+          <!-- Floor Level -->
+          <div class="form-field">
+            <label for="chosenFloorInput"><i class="fa-solid fa-layer-group"></i> <span data-i18n="lbl_floor">Parking Floor Level</span></label>
+            <input type="text" id="chosenFloorInput" value="Ground Floor" readonly>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Duration Selector -->
+          <div class="form-field">
+            <label for="parkingDurationSelect"><i class="fa-solid fa-clock"></i> <span data-i18n="lbl_duration">Expected Parking Duration</span></label>
+            <select id="parkingDurationSelect">
+              <option value="1">1 Hour (Quick Stop)</option>
+              <option value="2" selected>2 Hours (Standard)</option>
+              <option value="3">3 Hours (Shopping / Movie)</option>
+              <option value="5">5 Hours (Extended Stay)</option>
+              <option value="8">8 Hours (Full Day Parking)</option>
+            </select>
+          </div>
+
+          <!-- Vehicle Selection -->
+          <div class="form-field">
+            <div class="field-label-row">
+              <label for="bookingPlateSelect"><i class="fa-solid fa-id-card"></i> <span data-i18n="lbl_vehicle">Vehicle for this Booking</span></label>
+              <a href="vehicles.html" target="_blank" rel="noopener noreferrer" class="add-vehicle-link"><i class="fa-solid fa-plus"></i> Add Vehicle</a>
+            </div>
+            <select id="bookingPlateSelect">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- EV Charging Optional Toggle -->
+        <div class="form-field">
+          <label class="ev-toggle-label">
+            <input type="checkbox" id="enableEvChargingCheckbox">
+            <span class="ev-toggle-custom"></span>
+            <span><i class="fa-solid fa-bolt-lightning" style="color: #06b6d4;"></i> <span data-i18n="lbl_ev_charge">Activate EV Supercharger Station (+₹30 flat charging fee)</span></span>
+          </label>
+        </div>
+
+        <!-- Landmark & Notes -->
+        <div class="form-field">
+          <label for="bookingNotesInput"><i class="fa-solid fa-note-sticky"></i> <span data-i18n="lbl_notes">Landmark or Reminder Notes (Optional)</span></label>
+          <input type="text" id="bookingNotesInput" placeholder="e.g. Parked near staircase, pillar painted yellow">
+        </div>
+
+        <!-- Estimated Total & Proceed to Pay Button -->
+        <div class="booking-summary-row">
+          <div class="fare-estimate">
+            <span class="fare-label" data-i18n="lbl_fare">Estimated Parking Fee:</span>
+            <strong class="fare-amount" id="estimatedFareText">₹40 (2 Hours)</strong>
+          </div>
+          <!-- Triggers Payment Modal -->
+          <button type="submit" class="btn btn-primary btn-lg" id="proceedToPayBtn">
+            <i class="fa-solid fa-credit-card"></i>
+            <span data-i18n="btn_proceed_pay">Proceed to Payment & Confirm</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- ADVANCED MULTI-TAB PAYMENT GATEWAY MODAL -->
+  <div id="paymentModal" class="modal-backdrop hidden">
+    <div class="modal-box payment-modal-box">
+      <div class="modal-top">
+        <div class="modal-badge-title">
+          <i class="fa-solid fa-shield-check"></i> <span data-i18n="checkout_title">Secure Parking Checkout</span>
+        </div>
+        <button type="button" id="closePaymentModalBtn" class="modal-close-icon">&times;</button>
+      </div>
+
+      <div class="payment-order-summary">
+        <div class="summary-line">
+          <span data-i18n="summary_slot">Parking Bay & Floor:</span>
+          <strong id="modalSummarySlot">Slot B-04 (Ground Floor)</strong>
+        </div>
+        <div class="summary-line">
+          <span data-i18n="summary_vehicle">Duration & Vehicle:</span>
+          <strong id="modalSummaryVehicle">2 Hours &bull; DL 01 AB 1234</strong>
+        </div>
+        <div class="summary-line total-line">
+          <span data-i18n="summary_amount">Amount Payable:</span>
+          <strong class="pay-amount" id="modalSummaryAmount">₹40</strong>
+        </div>
+      </div>
+
+      <!-- Payment Category Tabs -->
+      <div class="pay-cat-tabs" id="payCatTabsBar">
+        <button type="button" class="pay-cat-tab-btn active" data-tab="upi">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span data-i18n="pay_tab_upi">📱 UPI & QR</span>
+        </button>
+        <button type="button" class="pay-cat-tab-btn" data-tab="card">
+          <i class="fa-regular fa-credit-card"></i>
+          <span data-i18n="pay_tab_card">💳 Cards</span>
+        </button>
+        <button type="button" class="pay-cat-tab-btn" data-tab="netbank">
+          <i class="fa-solid fa-building-columns"></i>
+          <span data-i18n="pay_tab_netbank">🏦 Net Banking</span>
+        </button>
+        <button type="button" class="pay-cat-tab-btn" data-tab="fastag">
+          <i class="fa-solid fa-bolt"></i>
+          <span data-i18n="pay_tab_fastag">⚡ FASTag</span>
+        </button>
+        <button type="button" class="pay-cat-tab-btn" data-tab="cash">
+          <i class="fa-solid fa-coins"></i>
+          <span data-i18n="pay_tab_cash">💵 Exit Cash</span>
+        </button>
+      </div>
+
+      <!-- PANE 1: UPI & DYNAMIC QR -->
+      <div id="payPaneUpi" class="pay-cat-pane">
+        <div class="upi-grid">
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="Google Pay" checked>
+            <div class="upi-app-inner">
+              <i class="fa-brands fa-google-pay" style="color:#ea4335;"></i>
+              <span>Google Pay</span>
+            </div>
+          </label>
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="PhonePe">
+            <div class="upi-app-inner">
+              <i class="fa-solid fa-mobile-screen-button" style="color:#6739b7;"></i>
+              <span>PhonePe</span>
+            </div>
+          </label>
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="Paytm UPI">
+            <div class="upi-app-inner">
+              <i class="fa-solid fa-wallet" style="color:#00baf2;"></i>
+              <span>Paytm</span>
+            </div>
+          </label>
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="BHIM UPI">
+            <div class="upi-app-inner">
+              <i class="fa-solid fa-shield-halved" style="color:#22c55e;"></i>
+              <span>BHIM UPI</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="upi-qr-box">
+          <div class="upi-qr-graphic">
+            <div class="qr-scan-pulse"></div>
+            <!-- Dynamic SVG QR Code Representation -->
+            <svg viewBox="0 0 100 100" fill="#0f172a">
+              <rect x="5" y="5" width="28" height="28" rx="2" fill="#0f172a"/>
+              <rect x="9" y="9" width="20" height="20" fill="#ffffff"/>
+              <rect x="13" y="13" width="12" height="12" fill="#0f172a"/>
+              <rect x="67" y="5" width="28" height="28" rx="2" fill="#0f172a"/>
+              <rect x="71" y="9" width="20" height="20" fill="#ffffff"/>
+              <rect x="75" y="13" width="12" height="12" fill="#0f172a"/>
+              <rect x="5" y="67" width="28" height="28" rx="2" fill="#0f172a"/>
+              <rect x="9" y="71" width="20" height="20" fill="#ffffff"/>
+              <rect x="13" y="75" width="12" height="12" fill="#0f172a"/>
+              <circle cx="50" cy="50" r="8" fill="#dc2626"/>
+              <rect x="42" y="10" width="8" height="8" fill="#0f172a"/>
+              <rect x="52" y="18" width="6" height="12" fill="#0f172a"/>
+              <rect x="38" y="70" width="10" height="10" fill="#0f172a"/>
+              <rect x="52" y="66" width="14" height="6" fill="#0f172a"/>
+              <rect x="72" y="44" width="8" height="16" fill="#0f172a"/>
+              <rect x="84" y="68" width="10" height="10" fill="#0f172a"/>
+              <rect x="42" y="86" width="14" height="8" fill="#0f172a"/>
+              <rect x="66" y="82" width="8" height="12" fill="#0f172a"/>
+            </svg>
+          </div>
+          <div class="upi-qr-meta">
+            <h4 data-i18n="pay_scan_qr">Scan Dynamic UPI QR Code</h4>
+            <p data-i18n="pay_scan_desc">Scan using any UPI App (GPay, PhonePe, Paytm, BHIM) to pay instantly.</p>
+            <span class="qr-timer-pill"><i class="fa-solid fa-clock"></i> Live Dynamic Token (Active)</span>
+          </div>
+        </div>
+
+        <div class="upi-id-row">
+          <input type="text" id="customUpiInput" placeholder="Enter Virtual UPI ID (e.g. rider@okhdfcbank)">
+          <button type="button" class="upi-verify-btn" id="verifyUpiBtn">Verify ID</button>
+        </div>
+      </div>
+
+      <!-- PANE 2: CARDS -->
+      <div id="payPaneCard" class="pay-cat-pane hidden">
+        <div class="card-preview-virtual">
+          <div class="card-pv-top">
+            <div class="card-chip"></div>
+            <i class="fa-brands fa-cc-visa card-network-icon" id="cardNetworkIcon"></i>
+          </div>
+          <div class="card-pv-num" id="cardPreviewNumber">•••• •••• •••• 8841</div>
+          <div class="card-pv-btm">
+            <div>
+              <span>Card Holder</span>
+              <strong id="cardPreviewName" style="display:block; color:#fff;">ALEX RIDER</strong>
+            </div>
+            <div>
+              <span>Expires</span>
+              <strong id="cardPreviewExpiry" style="display:block; color:#fff;">12/28</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-form-grid">
+          <div class="card-input-item card-field-full">
+            <label>Card Number</label>
+            <input type="text" id="cardInputNumber" placeholder="4532 8812 3456 8841" maxlength="19">
+          </div>
+          <div class="card-input-item card-field-full">
+            <label>Cardholder Name</label>
+            <input type="text" id="cardInputName" placeholder="Full name as printed on card">
+          </div>
+          <div class="card-input-item">
+            <label>Expiry Date</label>
+            <input type="text" id="cardInputExpiry" placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="card-input-item">
+            <label>CVV / CVC</label>
+            <input type="password" id="cardInputCvv" placeholder="•••" maxlength="4">
+          </div>
+          <div class="card-input-item" style="justify-content:center;">
+            <label style="opacity:0;">Type</label>
+            <label class="pay-method-card" style="margin:0;">
+              <input type="radio" name="payMethod" value="Credit/Debit Card">
+              <span class="btn btn-outline btn-xs" style="width:100%; text-align:center;">Select Card</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANE 3: NET BANKING -->
+      <div id="payPaneNetbank" class="pay-cat-pane hidden">
+        <div class="netbank-grid">
+          <div class="bank-item-card active" data-bank="State Bank of India (SBI)">
+            <i class="fa-solid fa-building-columns" style="color:#0083ca;"></i>
+            <span>SBI</span>
+          </div>
+          <div class="bank-item-card" data-bank="HDFC Bank">
+            <i class="fa-solid fa-building-columns" style="color:#004c8f;"></i>
+            <span>HDFC Bank</span>
+          </div>
+          <div class="bank-item-card" data-bank="ICICI Bank">
+            <i class="fa-solid fa-building-columns" style="color:#f37021;"></i>
+            <span>ICICI Bank</span>
+          </div>
+          <div class="bank-item-card" data-bank="Axis Bank">
+            <i class="fa-solid fa-building-columns" style="color:#97144d;"></i>
+            <span>Axis Bank</span>
+          </div>
+          <div class="bank-item-card" data-bank="Punjab National Bank (PNB)">
+            <i class="fa-solid fa-building-columns" style="color:#a20032;"></i>
+            <span>PNB</span>
+          </div>
+          <div class="bank-item-card" data-bank="Kotak Mahindra Bank">
+            <i class="fa-solid fa-building-columns" style="color:#ed1c24;"></i>
+            <span>Kotak Bank</span>
+          </div>
+        </div>
+        <select id="otherBanksSelect" class="bank-select-dropdown">
+          <option value="">-- Or choose from 50+ Other Banks --</option>
+          <option value="Bank of Baroda">Bank of Baroda</option>
+          <option value="Canara Bank">Canara Bank</option>
+          <option value="Union Bank of India">Union Bank of India</option>
+          <option value="IndusInd Bank">IndusInd Bank</option>
+          <option value="IDFC First Bank">IDFC First Bank</option>
+          <option value="Yes Bank">Yes Bank</option>
+        </select>
+        <input type="hidden" id="selectedNetBankName" value="SBI">
+      </div>
+
+      <!-- PANE 4: FASTAG & WALLETS -->
+      <div id="payPaneFastag" class="pay-cat-pane hidden">
+        <div class="fastag-hero-card active" id="fastagSelectCard">
+          <div class="fastag-icon-badge">
+            <i class="fa-solid fa-rss"></i>
+          </div>
+          <div class="fastag-meta">
+            <h4>FASTag Automated Parking Pass <span class="fastag-tag-pill">AUTO-DEBIT</span></h4>
+            <p>Boom-barrier automatically opens on exit via RFID sensor. Fee debited directly from linked FASTag wallet.</p>
+          </div>
+        </div>
+
+        <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase;">Or Pay via Mobile Wallet</div>
+        <div class="wallets-subgrid">
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="Paytm Wallet">
+            <div class="upi-app-inner">
+              <i class="fa-solid fa-wallet" style="color:#00baf2;"></i>
+              <span>Paytm Wallet</span>
+            </div>
+          </label>
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="Amazon Pay">
+            <div class="upi-app-inner">
+              <i class="fa-brands fa-amazon-pay" style="color:#ff9900;"></i>
+              <span>Amazon Pay</span>
+            </div>
+          </label>
+          <label class="upi-app-card">
+            <input type="radio" name="payMethod" value="Mobikwik">
+            <div class="upi-app-inner">
+              <i class="fa-solid fa-credit-card" style="color:#0078d4;"></i>
+              <span>MobiKwik</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- PANE 5: PAY AT EXIT / CASH -->
+      <div id="payPaneCash" class="pay-cat-pane hidden">
+        <div class="pay-exit-options">
+          <div class="exit-opt-card active" data-cash-type="Exit Barrier Cash Booth">
+            <i class="fa-solid fa-coins exit-opt-icon"></i>
+            <div class="exit-opt-text">
+              <h4>Pay Cash at Exit Boom Barrier</h4>
+              <p>Hand over exact parking amount to the automated cash kiosk or attendant at Gate 2.</p>
+            </div>
+          </div>
+          <div class="exit-opt-card" data-cash-type="Parking Attendant Desk">
+            <i class="fa-solid fa-user-tie exit-opt-icon"></i>
+            <div class="exit-opt-text">
+              <h4>Pay at Central Valet & Attendant Desk</h4>
+              <p>Settle payment physically at the ground floor lobby attendant counter anytime.</p>
+            </div>
+          </div>
+          <div class="exit-opt-card" data-cash-type="Exit Barrier UPI QR">
+            <i class="fa-solid fa-qrcode exit-opt-icon"></i>
+            <div class="exit-opt-text">
+              <h4>Scan QR Code on Exit Barrier Sensor</h4>
+              <p>A dynamic QR will be projected onto the boom barrier screen when your car approaches.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Spinner Overlay -->
+      <div id="paymentProcessingState" class="pay-processing-state hidden">
+        <div class="processing-spinner"></div>
+        <strong id="payProcessStatusText">Authorizing Payment...</strong>
+        <p id="payProcessSubText">Connecting to secure bank gateway. Please do not close.</p>
+      </div>
+
+      <!-- Modal Action -->
+      <div class="modal-action-row" id="paymentBtnRow">
+        <button type="button" id="payAndConfirmBtn" class="btn btn-primary btn-block btn-lg">
+          <i class="fa-solid fa-shield-check"></i>
+          <span id="payBtnLabel">Pay ₹40 & Lock Spot</span>
+        </button>
+        <button type="button" id="openPaymentTabBtn" class="btn btn-outline btn-block" style="margin-top: 10px;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Open Payment Page in New Tab</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clean Toast Alerts -->
+  <div id="toastNotification" class="toast-popup hidden">
+    <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+    <span id="toastMessage">Slot booked successfully.</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Where Did I Park</strong> &bull; Custom Interactive Parking Map & Spot Reservation System.
+      </div>
+      <div class="footer-right">
+        <span>Page 1: Map & Booking &bull; Handcrafted with HTML, CSS & JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

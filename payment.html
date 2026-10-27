@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment Gateway | Where Did I Park - Spot Checkout & Recharges</title>
+  <meta name="description" content="Secure payment gateway for Where Did I Park. Complete parking bay reservations via UPI, Credit/Debit Card, Net Banking, FASTag, or Cash.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode" data-page="payment">
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="window.location.href='index.html'" title="Return to Portal Home">
+        <div class="logo-badge">
+          <i class="fa-solid fa-square-parking"></i>
+        </div>
+        <div class="logo-meta">
+          <span class="brand-name">Where Did I Park</span>
+          <span class="brand-tagline">Smart Parking & Slot Booking</span>
+        </div>
+      </div>
+
+      <!-- Navigation Pages (5 Modules) -->
+      <nav class="portal-nav-links">
+        <a href="map.html" class="portal-nav-item">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span data-i18n="nav_map">1. Map & Book</span>
+        </a>
+        <a href="pass.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" id="navPassLink" title="Opens in new tab">
+          <i class="fa-solid fa-ticket"></i>
+          <span data-i18n="nav_pass">2. Active Pass</span>
+          <span class="nav-live-dot hidden" id="navPassDot"></span>
+        </a>
+        <a href="vehicles.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-warehouse"></i>
+          <span data-i18n="nav_garage">3. My Garage</span>
+        </a>
+        <a href="history.html" target="_blank" rel="noopener noreferrer" class="portal-nav-item" title="Opens in new tab">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span data-i18n="nav_history">4. History</span>
+        </a>
+        <a href="payment.html" class="portal-nav-item active" title="Current Page">
+          <i class="fa-solid fa-credit-card"></i>
+          <span data-i18n="nav_payment">5. Payment</span>
+        </a>
+      </nav>
+
+      <!-- Navigation Actions -->
+      <div class="nav-actions">
+        <!-- Language Selector Dropdown -->
+        <div class="lang-selector-dropdown" id="langSelectorWrap">
+          <button type="button" class="lang-btn" id="langToggleBtn" title="Change Language / भाषा बदलें">
+            <i class="fa-solid fa-language"></i>
+            <span id="currentLangLabel">English</span>
+            <i class="fa-solid fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu hidden" id="langDropdownMenu">
+            <button type="button" class="lang-opt-btn active" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-native">EN</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="hi">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Hindi</span>
+              <span class="lang-native">हिंदी</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="pa">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Punjabi</span>
+              <span class="lang-native">ਪੰਜਾਬੀ</span>
+            </button>
+            <button type="button" class="lang-opt-btn" data-lang="ta">
+              <span class="lang-flag">🇮🇳</span>
+              <span class="lang-name">Tamil</span>
+              <span class="lang-native">தமிழ்</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Voice Assistant Toggle -->
+        <button id="voiceToggleBtn" class="icon-toggle-btn active" title="Toggle Voice Assistant">
+          <i class="fa-solid fa-volume-high" id="voiceIcon"></i>
+          <span class="btn-subtext" data-i18n="voice_on">Voice ON</span>
+        </button>
+
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="themeToggleBtn" class="theme-switch-btn" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+          <span class="theme-text" id="themeText" data-i18n="theme_light">Light Mode</span>
+        </button>
+
+        <!-- User Profile Capsule -->
+        <div class="user-profile-capsule hidden" id="userProfileCapsule">
+          <div class="user-avatar-letter" id="userAvatarLetter">A</div>
+          <div class="user-capsule-meta">
+            <span class="user-capsule-name" id="navUserName">Alex Rider</span>
+            <span class="user-capsule-plate" id="navUserPlate">DL 01 AB 7788</span>
+          </div>
+          <button type="button" class="capsule-logout-btn" id="logoutBtn" title="Sign Out">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span data-i18n="sign_out">Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+
+    <!-- Payment Page Hero Banner -->
+    <div class="page-top-banner">
+      <div class="p-banner-text">
+        <span class="page-step-pill">Module 5 &bull; Instant Settlement Gateway</span>
+        <h1 class="page-main-title">Secure Parking Payment Gateway</h1>
+        <p class="page-main-sub">
+          Complete your spot reservation with bank-grade 256-bit SSL encryption. Digital passes are unlocked immediately upon payment.
+        </p>
+      </div>
+      <div class="p-banner-action">
+        <a href="pass.html" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-ticket"></i> View Active Pass ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- Payment Container Grid (Order Summary + Payment Gateway) -->
+    <div class="payment-portal-grid">
+
+      <!-- LEFT COLUMN: Order / Booking Summary -->
+      <section class="payment-summary-card">
+        <div class="card-header-styled">
+          <div class="card-header-title">
+            <i class="fa-solid fa-receipt card-icon-red"></i>
+            <h3>Reservation Order Summary</h3>
+          </div>
+          <span class="status-pill status-ready">Ready for Checkout</span>
+        </div>
+
+        <div class="summary-details-box">
+          <div class="summary-field">
+            <span class="s-label"><i class="fa-solid fa-hashtag"></i> Selected Parking Bay:</span>
+            <span class="s-value highlight" id="checkoutSlotId">Slot G-04 (Ground Floor)</span>
+          </div>
+          <div class="summary-field">
+            <span class="s-label"><i class="fa-solid fa-layer-group"></i> Parking Floor Level:</span>
+            <span class="s-value" id="checkoutFloorLevel">Ground Floor (G)</span>
+          </div>
+          <div class="summary-field">
+            <span class="s-label"><i class="fa-solid fa-id-card"></i> Registered Vehicle:</span>
+            <span class="s-value" id="checkoutVehiclePlate">Tata Nexon EV - DL 01 AB 7788</span>
+          </div>
+          <div class="summary-field">
+            <span class="s-label"><i class="fa-solid fa-clock"></i> Parking Duration:</span>
+            <span class="s-value" id="checkoutDuration">2 Hours</span>
+          </div>
+          <div class="summary-field">
+            <span class="s-label"><i class="fa-solid fa-bolt-lightning" style="color:#06b6d4;"></i> EV Supercharger Station:</span>
+            <span class="s-value" id="checkoutEvStatus">Not Active</span>
+          </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="price-breakdown-box">
+          <div class="price-row">
+            <span>Base Parking Fee (<span id="calcHours">2</span> hrs @ ₹20/hr):</span>
+            <strong id="calcBaseFee">₹40</strong>
+          </div>
+          <div class="price-row">
+            <span>EV Fast Charging Station Fee:</span>
+            <strong id="calcEvFee">₹0</strong>
+          </div>
+          <div class="price-row">
+            <span>Platform GST & Smart Sensors:</span>
+            <strong>₹0 <small class="text-free">(Waived)</small></strong>
+          </div>
+          <div class="price-row total-row">
+            <span>Total Payable Amount:</span>
+            <strong class="total-price" id="checkoutTotalAmount">₹40</strong>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="security-trust-box">
+          <div class="trust-item">
+            <i class="fa-solid fa-lock"></i>
+            <span>256-Bit SSL Secured</span>
+          </div>
+          <div class="trust-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>PCI-DSS Level 1 Compliant</span>
+          </div>
+          <div class="trust-item">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Instant Digital Pass Unlock</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Payment Methods & Gateway -->
+      <section class="payment-methods-card" id="paymentMethodsCard">
+        <div class="card-header-styled">
+          <div class="card-header-title">
+            <i class="fa-solid fa-credit-card card-icon-red"></i>
+            <h3>Choose Payment Method</h3>
+          </div>
+          <span class="security-capsule"><i class="fa-solid fa-shield-check"></i> Encrypted Gateway</span>
+        </div>
+
+        <!-- Method Tabs -->
+        <div class="pay-method-tabs" id="payMethodTabs">
+          <button type="button" class="method-tab active" data-method="upi">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>UPI & QR</span>
+          </button>
+          <button type="button" class="method-tab" data-method="card">
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Cards</span>
+          </button>
+          <button type="button" class="method-tab" data-method="netbank">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>Net Banking</span>
+          </button>
+          <button type="button" class="method-tab" data-method="fastag">
+            <i class="fa-solid fa-rss"></i>
+            <span>FASTag</span>
+          </button>
+          <button type="button" class="method-tab" data-method="cash">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Cash at Exit</span>
+          </button>
+        </div>
+
+        <!-- TAB PANE 1: UPI & QR -->
+        <div class="method-pane" id="paneUpi">
+          <div class="upi-container">
+            <div class="upi-qr-box">
+              <div class="qr-code-frame">
+                <i class="fa-solid fa-qrcode qr-icon-large"></i>
+                <div class="qr-scan-line"></div>
+              </div>
+              <span class="qr-helper-text">Scan with any UPI App (GPay, PhonePe, Paytm)</span>
+            </div>
+
+            <div class="upi-or-divider">
+              <span>OR ENTER UPI ID</span>
+            </div>
+
+            <div class="form-field">
+              <label for="upiVpaInput"><i class="fa-solid fa-at"></i> Virtual Payment Address (VPA)</label>
+              <div class="input-wrapper">
+                <input type="text" id="upiVpaInput" placeholder="e.g. alex@okaxis or 9876543210@paytm" value="alex@okhdfcbank">
+                <button type="button" class="btn btn-outline btn-sm" id="verifyUpiBtn">Verify</button>
+              </div>
+            </div>
+
+            <div class="quick-upi-apps">
+              <span class="quick-app-badge active"><i class="fa-brands fa-google-pay"></i> Google Pay</span>
+              <span class="quick-app-badge"><i class="fa-solid fa-wallet"></i> PhonePe</span>
+              <span class="quick-app-badge"><i class="fa-solid fa-bolt"></i> Paytm</span>
+              <span class="quick-app-badge"><i class="fa-solid fa-landmark"></i> BHIM UPI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANE 2: CARDS -->
+        <div class="method-pane hidden" id="paneCard">
+          <div class="card-simulator-wrap">
+            <!-- Visual Credit Card Preview -->
+            <div class="visual-card-preview">
+              <div class="card-preview-top">
+                <span class="card-chip"><i class="fa-solid fa-microchip"></i></span>
+                <span class="card-network-logo"><i class="fa-brands fa-cc-visa"></i></span>
+              </div>
+              <div class="card-preview-number" id="previewCardNum">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242</div>
+              <div class="card-preview-bottom">
+                <div>
+                  <div class="c-meta-lbl">CARD HOLDER</div>
+                  <div class="c-meta-val" id="previewCardHolder">ALEX RIDER</div>
+                </div>
+                <div>
+                  <div class="c-meta-lbl">EXPIRES</div>
+                  <div class="c-meta-val" id="previewCardExpiry">12/28</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Inputs -->
+            <div class="card-inputs-grid">
+              <div class="form-field">
+                <label for="cardNumInput">Card Number</label>
+                <div class="input-wrapper">
+                  <i class="fa-regular fa-credit-card input-icon"></i>
+                  <input type="text" id="cardNumInput" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242" maxlength="19">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="cardExpiryInput">Expiry Date</label>
+                  <input type="text" id="cardExpiryInput" placeholder="MM/YY" value="12/28" maxlength="5">
+                </div>
+                <div class="form-field">
+                  <label for="cardCvvInput">CVV / CVC</label>
+                  <input type="password" id="cardCvvInput" placeholder="123" value="789" maxlength="4">
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="cardNameInput">Cardholder Name</label>
+                <input type="text" id="cardNameInput" placeholder="Alex Rider" value="Alex Rider">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANE 3: NET BANKING -->
+        <div class="method-pane hidden" id="paneNetbank">
+          <div class="netbank-grid">
+            <label class="bank-pill active">
+              <input type="radio" name="bankOpt" value="HDFC Bank" checked>
+              <i class="fa-solid fa-building-columns"></i>
+              <span>HDFC Bank</span>
+            </label>
+            <label class="bank-pill">
+              <input type="radio" name="bankOpt" value="State Bank of India">
+              <i class="fa-solid fa-building-columns"></i>
+              <span>SBI</span>
+            </label>
+            <label class="bank-pill">
+              <input type="radio" name="bankOpt" value="ICICI Bank">
+              <i class="fa-solid fa-building-columns"></i>
+              <span>ICICI Bank</span>
+            </label>
+            <label class="bank-pill">
+              <input type="radio" name="bankOpt" value="Axis Bank">
+              <i class="fa-solid fa-building-columns"></i>
+              <span>Axis Bank</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- TAB PANE 4: FASTAG -->
+        <div class="method-pane hidden" id="paneFastag">
+          <div class="fastag-box">
+            <div class="fastag-header">
+              <i class="fa-solid fa-rss fastag-icon"></i>
+              <div>
+                <strong>FASTag Auto-Debit via RFID</strong>
+                <p>Funds will be automatically deducted from your vehicle's linked FASTag wallet at exit.</p>
+              </div>
+            </div>
+            <div class="fastag-wallet-pill">
+              <span>Linked Vehicle:</span>
+              <strong id="fastagVehiclePlate">DL 01 AB 7788</strong>
+              <span class="fastag-status-active"><i class="fa-solid fa-check"></i> Wallet Active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANE 5: CASH AT EXIT -->
+        <div class="method-pane hidden" id="paneCash">
+          <div class="cash-box">
+            <i class="fa-solid fa-hand-holding-dollar cash-icon-large"></i>
+            <h4>Pay Cash at Ground Floor Attendant Counter</h4>
+            <p>You can pay via Cash at the exit boom barrier checkout booth. Your digital token will be generated instantly.</p>
+          </div>
+        </div>
+
+        <!-- Processing State Overlay -->
+        <div class="payment-processing-overlay hidden" id="paymentProcessState">
+          <div class="processing-spinner"></div>
+          <h4 id="paymentProcessStatusTitle">Authorizing Payment...</h4>
+          <p id="paymentProcessStatusDesc">Connecting to banking network. Generating your active parking pass...</p>
+        </div>
+
+        <!-- Success Receipt State -->
+        <div class="payment-success-card hidden" id="paymentSuccessCard">
+          <div class="success-icon-wrap">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <h3 class="success-title">Payment Approved & Spot Locked!</h3>
+          <p class="success-subtitle">Your parking spot has been reserved. Your digital barcode pass is now live.</p>
+
+          <div class="receipt-mini-capsule">
+            <div class="r-row">
+              <span>Pass Identifier:</span>
+              <strong id="successPassId">PK-8842</strong>
+            </div>
+            <div class="r-row">
+              <span>Reserved Bay:</span>
+              <strong id="successSlot">Slot G-04</strong>
+            </div>
+            <div class="r-row">
+              <span>Amount Paid:</span>
+              <strong id="successAmount">₹40</strong>
+            </div>
+          </div>
+
+          <div class="success-actions-row">
+            <a href="pass.html" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg btn-block" id="successOpenPassBtn">
+              <i class="fa-solid fa-ticket"></i>
+              <span>Open Active Pass in New Tab ↗</span>
+            </a>
+            <a href="map.html" class="btn btn-outline btn-block" style="margin-top: 10px;">
+              <i class="fa-solid fa-map-location-dot"></i> Return to Parking Map
+            </a>
+          </div>
+        </div>
+
+        <!-- Main Action CTA Row -->
+        <div class="payment-action-bottom" id="paymentActionRow">
+          <button type="button" class="btn btn-primary btn-block btn-lg" id="paySubmitBtn">
+            <i class="fa-solid fa-shield-check"></i>
+            <span id="paySubmitLabel">Authorize & Settle ₹40</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Clean Toast Alerts -->
+  <div id="toastNotification" class="toast-popup hidden">
+    <i class="fa-solid fa-circle-check" id="toastIcon"></i>
+    <span id="toastMessage">Payment notification</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Where Did I Park</strong> &bull; Secure Digital Payment & Spot Reservation System.
+      </div>
+      <div class="footer-right">
+        <span>Handcrafted with HTML, CSS & JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

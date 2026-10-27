@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Where Did I Park — VEHICLES (GARAGE) PAGE STYLESHEET
+   Used by: vehicles.html (data-page="vehicles")
+   Contains: Garage layout grid, add-vehicle form card,
+             fleet cards (active/inactive), garage tip box
+   ========================================================================== */
+
+/* --------------------------------------------------
+   Garage Split Layout
+   -------------------------------------------------- */
+.garage-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 20px;
+}
+
+/* --------------------------------------------------
+   Garage Tip Info Box
+   -------------------------------------------------- */
+.garage-tip-box {
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--brand-red);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--text-words);
+}
+
+.garage-tip-box i {
+  color: var(--brand-red);
+  margin-top: 2px;
+}
+
+.garage-tip-box strong {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-words);
+}
+
+.garage-tip-box p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------
+   Fleet Cards Container
+   -------------------------------------------------- */
+.fleet-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Individual Fleet Vehicle Card */
+.fleet-vehicle-card {
+  background: var(--bg-subtle);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all var(--transition-smooth);
+}
+
+.fleet-vehicle-card.fleet-active {
+  border-color: var(--brand-red);
+  background: var(--brand-red-subtle);
+  box-shadow: 0 0 14px var(--brand-red-glow);
+}
+
+/* Fleet Card Icon */
+.fleet-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background-color: var(--brand-red-subtle);
+  color: var(--brand-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.fleet-vehicle-card.fleet-active .fleet-icon {
+  background-color: var(--brand-red);
+  color: #ffffff;
+}
+
+/* Fleet Info Text */
+.fleet-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fleet-info strong {
+  font-size: 0.95rem;
+  color: var(--text-words);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.fleet-info span {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.fleet-info em {
+  color: var(--brand-red);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* Fleet Actions */
+.fleet-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Active Badge (shown when vehicle is already active) */
+.active-badge {
+  background: var(--brand-red);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* --------------------------------------------------
+   Responsive: Vehicles Page
+   -------------------------------------------------- */
+@media (max-width: 900px) {
+  .garage-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
