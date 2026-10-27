@@ -15,7 +15,7 @@ The project uses plain HTML, CSS, and JavaScript. It has no build step, package 
    ```
 
    If `py` is not available, try `python -m http.server 8000`.
-4. Open [http://localhost:8000](http://localhost:8000) in a browser.
+4. Open [https://princeku490.github.io/Where_Did_I_Park/0](Where Did I Park) in a browser.
 5. Stop the server with `Ctrl+C` when finished.
 
 Using a local server is recommended over opening the HTML files directly. The app relies on browser storage, and browser behavior for `file://` pages can vary.
